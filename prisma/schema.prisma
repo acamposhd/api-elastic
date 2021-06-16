@@ -7,3 +7,1046 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model analytics {
+  id                                         Int                @id @default(autoincrement())
+  author_id                                  Int
+  created_at                                 DateTime?          @default(now()) @db.Timestamp(6)
+  public                                     Boolean?           @default(false)
+  deleted                                    Boolean?           @default(false)
+  is_template                                Boolean?           @default(false)
+  deleted_at                                 DateTime?          @db.Timestamp(6)
+  image_id                                   Int?
+  project_id                                 Int?
+  organization_id                            Int?
+  user                                       user               @relation(fields: [author_id], references: [id])
+  project_analytics_organization_idToproject project?           @relation("analytics_organization_idToproject", fields: [organization_id], references: [id])
+  project_analytics_project_idToproject      project?           @relation("analytics_project_idToproject", fields: [project_id], references: [id])
+  analytics_graphs                           analytics_graphs[]
+}
+
+model analytics_graphs {
+  id              Int           @id @default(autoincrement())
+  graph_id        Int?
+  analytics_id    Int?
+  column          Int?
+  row             Int?
+  project_id      Int?
+  organization_id Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  analytics       analytics?    @relation(fields: [analytics_id], references: [id])
+  graph           graph?        @relation(fields: [graph_id], references: [id])
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+}
+
+model answer {
+  id               Int           @id @default(autoincrement())
+  response         Json          @db.Json
+  created_at       DateTime?     @default(now()) @db.Timestamp(6)
+  deleted          Boolean?      @default(false)
+  deleted_at       DateTime?     @db.Timestamp(6)
+  survey_answer_id Int
+  completion_time  Int?
+  project_id       Int?
+  organization_id  Int?
+  question_id      Int?
+  organization     organization? @relation(fields: [organization_id], references: [id])
+  project          project?      @relation(fields: [project_id], references: [id])
+  question         question?     @relation(fields: [question_id], references: [id])
+  survey_answer    survey_answer @relation(fields: [survey_answer_id], references: [id])
+
+  @@unique([survey_answer_id, question_id], name: "answer_survey_answer_id_question_id_idx")
+}
+
+model comments {
+  id             Int          @id @default(autoincrement())
+  room_id        Int?
+  participant_id Int?
+  message        String?      @db.VarChar
+  created_at     DateTime?    @default(now()) @db.Timestamp(6)
+  participant    participant? @relation(fields: [participant_id], references: [id])
+  room           room?        @relation(fields: [room_id], references: [id])
+}
+
+model dashboard_config {
+  logo_url        String?       @db.VarChar
+  sidebar_color   String?       @db.VarChar
+  text_color      String?       @db.VarChar
+  language_id     Int?
+  zipcodes        Json?         @db.Json
+  geopoints       Json?         @db.Json
+  project_id      Int
+  organization_id Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  user_id         Int
+  language        String?       @db.VarChar
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project       @relation(fields: [project_id], references: [id])
+  user            user          @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, project_id])
+}
+
+model department {
+  id              Int               @id @default(autoincrement())
+  director_id     Int?
+  color           String            @db.VarChar
+  name            String            @db.VarChar
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  deleted         Boolean?          @default(false)
+  deleted_at      DateTime?         @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  user            user?             @relation(fields: [director_id], references: [id])
+  organization    organization?     @relation(fields: [organization_id], references: [id])
+  project         project?          @relation(fields: [project_id], references: [id])
+  report          report[]
+  typename        typename[]
+  user_department user_department[]
+  worker_project  worker_project[]
+
+  @@unique([project_id, name], name: "department_project_id_name_idx")
+  @@unique([project_id, name], name: "department_project_id_name_idx1")
+  @@unique([project_id, name], name: "department_project_id_name_idx2")
+  @@unique([project_id, name], name: "department_project_id_name_idx3")
+}
+
+model event {
+  id              Int                   @id @default(autoincrement())
+  address         String?               @db.VarChar
+  zipcode         String?               @db.VarChar
+  description     String?               @db.VarChar
+  location        Unsupported("point")?
+  is_template     Boolean?
+  title           String                @db.VarChar
+  published       Boolean?
+  published_at    DateTime?             @db.Timestamp(6)
+  disabled        Boolean?
+  image           String?               @db.VarChar
+  last_edit       DateTime?             @db.Timestamp(6)
+  website_link    String?               @db.VarChar
+  latitude        Float?
+  longitude       Float?
+  start_at        DateTime?             @db.Timestamp(6)
+  end_at          DateTime?             @db.Timestamp(6)
+  topic_id        Int?
+  project_id      Int?
+  organization_id Int?
+  created_at      DateTime?             @default(now()) @db.Timestamp(6)
+  deleted         Boolean?              @default(false)
+  deleted_at      DateTime?             @db.Timestamp(6)
+  timezone        String?               @db.VarChar
+  eventbrite_url  String?               @db.VarChar
+  organization    organization?         @relation(fields: [organization_id], references: [id])
+  project         project?              @relation(fields: [project_id], references: [id])
+  event_topic     event_topic?          @relation(fields: [topic_id], references: [id])
+  user_event      user_event[]
+}
+
+model eventbrite_account {
+  id              Int           @id @default(autoincrement())
+  project_id      Int           @unique
+  organization_id Int?
+  access_token    String        @db.VarChar
+  token_type      String        @db.VarChar
+  user_id         String        @db.VarChar
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project       @relation(fields: [project_id], references: [id])
+
+  @@index([project_id], name: "eventbrite_account_project_id_idx")
+}
+
+model event_topic {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  event           event[]
+
+  @@unique([project_id, name], name: "event_topic_project_id_name_idx")
+  @@unique([project_id, name], name: "event_topic_project_id_name_idx1")
+  @@unique([project_id, name], name: "event_topic_project_id_name_idx2")
+}
+
+model faq {
+  id              Int           @id @default(autoincrement())
+  title           String        @db.VarChar
+  description     String?       @db.VarChar
+  updated_at      DateTime?     @db.Timestamp(6)
+  content         String?       @db.VarChar
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  last_edit       DateTime?     @default(now()) @db.Timestamp(6)
+  faq_category_id Int?
+  project_id      Int
+  organization_id Int
+  published       Boolean?
+  posted_at       DateTime?     @db.Timestamp(6)
+  content_html    String?       @db.VarChar
+  webapp_faq      Boolean?      @default(false)
+  faq_category    faq_category? @relation(fields: [faq_category_id], references: [id])
+  organization    organization  @relation(fields: [organization_id], references: [id])
+  project         project       @relation(fields: [project_id], references: [id])
+}
+
+model faq_category {
+  id              Int           @id @default(autoincrement())
+  title           String        @db.VarChar
+  description     String?       @db.VarChar
+  edit_at         DateTime?     @db.Timestamp(6)
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  image           String?       @db.VarChar
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  faq             faq[]
+}
+
+model graph {
+  data             Json               @db.Json
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  deleted          Boolean?           @default(false)
+  deleted_at       DateTime?          @db.Timestamp(6)
+  id               Int                @id @default(autoincrement())
+  name             String?            @db.VarChar
+  analytics_graphs analytics_graphs[]
+}
+
+model mail {
+  id              Int          @id @default(autoincrement())
+  author_id       Int
+  subject         String       @db.VarChar
+  sent_at         DateTime?    @default(now()) @db.Timestamp(6)
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?    @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  last_edit       DateTime?    @db.Timestamp(6)
+  project_id      Int
+  organization_id Int
+  user            user         @relation(fields: [author_id], references: [id])
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project      @relation(fields: [project_id], references: [id])
+  mail_reply      mail_reply[]
+  user_mail       user_mail[]
+}
+
+model mail_reply {
+  id               Int                @id @default(autoincrement())
+  author_id        Int
+  mail_id          Int
+  body             String             @db.VarChar
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  deleted          Boolean?           @default(false)
+  deleted_at       DateTime?          @db.Timestamp(6)
+  last_edit        DateTime?          @db.Timestamp(6)
+  project_id       Int
+  organization_id  Int
+  user             user               @relation(fields: [author_id], references: [id])
+  mail             mail               @relation(fields: [mail_id], references: [id])
+  organization     organization       @relation(fields: [organization_id], references: [id])
+  project          project            @relation(fields: [project_id], references: [id])
+  reply_attachment reply_attachment[]
+}
+
+model message {
+  id                 Int                  @id @default(autoincrement())
+  author_id          Int
+  subject            String               @db.VarChar
+  body               String?              @db.VarChar
+  sent_at            DateTime?            @default(now()) @db.Timestamp(6)
+  date               DateTime?            @db.Timestamp(6)
+  type_id            Int
+  created_at         DateTime             @default(now()) @db.Timestamp(6)
+  deleted            Boolean?             @default(false)
+  deleted_at         DateTime?            @db.Timestamp(6)
+  locations          Json                 @db.Json
+  last_edit          DateTime?            @db.Timestamp(6)
+  project_id         Int?
+  organization_id    Int?
+  published          Boolean?             @default(false)
+  published_at       DateTime?            @db.Timestamp(6)
+  user               user                 @relation(fields: [author_id], references: [id])
+  organization       organization?        @relation(fields: [organization_id], references: [id])
+  project            project?             @relation(fields: [project_id], references: [id])
+  message_type       message_type         @relation(fields: [type_id], references: [id])
+  message_attachment message_attachment[]
+  user_message       user_message[]
+}
+
+model message_attachment {
+  id              Int             @id @default(autoincrement())
+  location        String          @db.VarChar
+  message_id      Int?
+  type            attachment_type
+  created_at      DateTime?       @default(now()) @db.Timestamp(6)
+  deleted         Boolean?        @default(false)
+  deleted_at      DateTime?       @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  name            String          @db.VarChar
+  size            String          @db.VarChar
+  message         message?        @relation(fields: [message_id], references: [id])
+  organization    organization?   @relation(fields: [organization_id], references: [id])
+  project         project?        @relation(fields: [project_id], references: [id])
+}
+
+model message_type {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar
+  message      message[]
+  user_message user_message[]
+}
+
+model news {
+  id              Int           @id @default(autoincrement())
+  title           String        @db.VarChar
+  message         String        @db.VarChar
+  image           String?       @db.VarChar
+  description     String?
+  website_link    String?       @db.VarChar
+  last_edit       DateTime?     @default(now()) @db.Timestamp(6)
+  published       Boolean?      @default(false)
+  posted_at       DateTime?     @db.Timestamp(6)
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  latitude        Float
+  longitude       Float
+  address         String        @db.VarChar
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+}
+
+model organization {
+  id                  Int                   @id @default(autoincrement())
+  contact             String?               @db.VarChar
+  name                String                @db.VarChar
+  country_code        String?               @db.VarChar
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  deleted             Boolean?              @default(false)
+  deleted_at          DateTime?             @db.Timestamp(6)
+  complete            Boolean?              @default(false)
+  avatar              String?               @db.VarChar
+  analytics_graphs    analytics_graphs[]
+  answer              answer[]
+  dashboard_config    dashboard_config[]
+  department          department[]
+  event               event[]
+  eventbrite_account  eventbrite_account[]
+  event_topic         event_topic[]
+  faq                 faq[]
+  faq_category        faq_category[]
+  mail                mail[]
+  mail_reply          mail_reply[]
+  message             message[]
+  message_attachment  message_attachment[]
+  news                news[]
+  organization_plan   organization_plan[]
+  project             project[]
+  project_csv         project_csv[]
+  project_inscription project_inscription[]
+  question            question[]
+  reply_attachment    reply_attachment[]
+  report              report[]
+  role                role[]
+  survey              survey[]
+  survey_answer       survey_answer[]
+  typename            typename[]
+  typename_category   typename_category[]
+  user                user[]
+  user_event          user_event[]
+  user_mail           user_mail[]
+  user_message        user_message[]
+  user_organization   user_organization[]
+  user_project        user_project[]
+  user_resource       user_resource[]
+  user_roles          user_roles[]
+  worker_project      worker_project[]
+}
+
+model organization_plan {
+  id              Int           @id @default(autoincrement())
+  plan_id         Int?
+  organization_id Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  updated_at      DateTime?     @db.Timestamp(6)
+  valid_until     DateTime?     @db.Timestamp(6)
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  plan            plan?         @relation(fields: [plan_id], references: [id])
+}
+
+model participant {
+  id       Int        @id @default(autoincrement())
+  room_id  Int?
+  user_id  Int?
+  room     room?      @relation(fields: [room_id], references: [id])
+  user     user?      @relation(fields: [user_id], references: [id])
+  comments comments[]
+}
+
+model plan {
+  id                Int                 @id @default(autoincrement())
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  deleted           Boolean?            @default(false)
+  deleted_at        DateTime?           @db.Timestamp(6)
+  updated_at        DateTime?           @db.Timestamp(6)
+  permission        Json?               @db.Json
+  name              String              @db.VarChar
+  organization_plan organization_plan[]
+}
+
+model programs {
+  id                                        Int       @id @default(autoincrement())
+  title                                     String    @db.VarChar
+  image                                     String?   @db.VarChar
+  description                               String?   @db.VarChar
+  website_link                              String?   @db.VarChar
+  last_edit                                 DateTime? @default(now()) @db.Timestamp(6)
+  published                                 Boolean?  @default(false)
+  posted_at                                 DateTime? @db.Timestamp(6)
+  created_at                                DateTime? @default(now()) @db.Timestamp(6)
+  deleted                                   Boolean?  @default(false)
+  deleted_at                                DateTime? @db.Timestamp(6)
+  project_id                                Int?
+  organization_id                           Int?
+  project_programs_organization_idToproject project?  @relation("programs_organization_idToproject", fields: [organization_id], references: [id])
+  project_programs_project_idToproject      project?  @relation("programs_project_idToproject", fields: [project_id], references: [id])
+}
+
+model project {
+  director_id                                                  Int?
+  id                                                           Int                   @id @default(autoincrement())
+  description                                                  String                @db.VarChar
+  name                                                         String                @db.VarChar
+  organization_id                                              Int?
+  created_at                                                   DateTime?             @default(now()) @db.Timestamp(6)
+  deleted                                                      Boolean?              @default(false)
+  deleted_at                                                   DateTime?             @db.Timestamp(6)
+  logo                                                         String?               @db.VarChar
+  address                                                      String?               @db.VarChar
+  is_private                                                   Boolean?              @default(false)
+  completion_status                                            Int?                  @default(0)
+  latitude                                                     Float?                @default(0.0)
+  longitude                                                    Float?                @default(0.0)
+  instagram_url                                                String?               @db.VarChar
+  twitter_url                                                  String?               @db.VarChar
+  facebook_url                                                 String?               @db.VarChar
+  linkedin_url                                                 String?               @db.VarChar
+  share                                                        Boolean?              @default(true)
+  sibebar_color                                                String?               @default("#000000") @db.VarChar
+  text_color                                                   String?               @default("#FFFFFF") @db.VarChar
+  published                                                    Boolean?              @default(true)
+  external_logo                                                String?               @db.VarChar
+  cost                                                         String?               @db.VarChar
+  estimated_completion                                         String?               @db.VarChar
+  owner_developer                                              String?               @db.VarChar
+  status                                                       String?               @db.VarChar
+  user_project_director_idTouser                               user?                 @relation("project_director_idTouser", fields: [director_id], references: [id])
+  organization                                                 organization?         @relation(fields: [organization_id], references: [id])
+  analytics_analytics_organization_idToproject                 analytics[]           @relation("analytics_organization_idToproject")
+  analytics_analytics_project_idToproject                      analytics[]           @relation("analytics_project_idToproject")
+  analytics_graphs                                             analytics_graphs[]
+  answer                                                       answer[]
+  dashboard_config                                             dashboard_config[]
+  department                                                   department[]
+  event                                                        event[]
+  eventbrite_account                                           eventbrite_account?
+  event_topic                                                  event_topic[]
+  faq                                                          faq[]
+  faq_category                                                 faq_category[]
+  mail                                                         mail[]
+  mail_reply                                                   mail_reply[]
+  message                                                      message[]
+  message_attachment                                           message_attachment[]
+  news                                                         news[]
+  programs_programs_organization_idToproject                   programs[]            @relation("programs_organization_idToproject")
+  programs_programs_project_idToproject                        programs[]            @relation("programs_project_idToproject")
+  project_inscription                                          project_inscription[]
+  question                                                     question[]
+  reply_attachment                                             reply_attachment[]
+  report                                                       report[]
+  resource_category_projectToresource_category_organization_id resource_category[]   @relation("projectToresource_category_organization_id")
+  resource_category_projectToresource_category_project_id      resource_category[]   @relation("projectToresource_category_project_id")
+  resources_projectToresources_organization_id                 resources[]           @relation("projectToresources_organization_id")
+  resources_projectToresources_project_id                      resources[]           @relation("projectToresources_project_id")
+  role                                                         role[]
+  survey                                                       survey[]
+  survey_answer                                                survey_answer[]
+  typename                                                     typename[]
+  typename_category                                            typename_category[]
+  user_projectTouser_project_id                                user[]                @relation("projectTouser_project_id")
+  user_department_projectTouser_department_organization_id     user_department[]     @relation("projectTouser_department_organization_id")
+  user_department_projectTouser_department_project_id          user_department[]     @relation("projectTouser_department_project_id")
+  user_event                                                   user_event[]
+  user_mail                                                    user_mail[]
+  user_message                                                 user_message[]
+  user_project                                                 user_project[]
+  user_resource                                                user_resource[]
+  user_roles                                                   user_roles[]
+  worker_project                                               worker_project[]
+
+  @@unique([organization_id, name], name: "idx_project_organization_id_name")
+  @@unique([name, organization_id], name: "project_name_organization_id_idx")
+}
+
+model project_csv {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar
+  description     String        @db.VarChar
+  address         String?       @db.VarChar
+  latitude        Float
+  longitude       Float
+  organization_id Int?
+  logo            String        @db.VarChar
+  private         Boolean?      @default(false)
+  share           Boolean?      @default(false)
+  completion      Int?          @default(0)
+  twitter_url     String?       @db.VarChar
+  facebook_url    String?       @db.VarChar
+  linkedin_url    String?       @db.VarChar
+  instagram_url   String?       @db.VarChar
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  organization    organization? @relation(fields: [organization_id], references: [id])
+
+  @@unique([organization_id, name], name: "idx_project_csv_organization_id_name")
+}
+
+model project_inscription {
+  id              Int                @id @default(autoincrement())
+  email           String             @db.VarChar
+  code            String             @db.VarChar
+  project_id      Int
+  created_at      DateTime?          @default(now()) @db.Timestamp(6)
+  deleted         Boolean?           @default(false)
+  deleted_at      DateTime?          @db.Timestamp(6)
+  status          invitation_status? @default(sent)
+  send_sms        Boolean?
+  organization_id Int
+  organization    organization       @relation(fields: [organization_id], references: [id])
+  project         project            @relation(fields: [project_id], references: [id])
+
+  @@unique([email, project_id], name: "project_inscription_email_project_id_idx")
+}
+
+model question {
+  id               Int           @id @default(autoincrement())
+  survey_id        Int
+  question_type_id Int
+  required         Boolean?
+  description      String?       @db.VarChar
+  settings         Json?         @db.Json
+  project_id       Int?
+  organization_id  Int?
+  created_at       DateTime?     @default(now()) @db.Timestamp(6)
+  deleted          Boolean?      @default(false)
+  deleted_at       DateTime?     @db.Timestamp(6)
+  options          Json[]        @db.Json
+  title            String        @db.VarChar
+  last_edit        DateTime?     @db.Timestamp(6)
+  order            Int?
+  next_question_id BigInt?
+  placeholder      Json?         @db.Json
+  organization     organization? @relation(fields: [organization_id], references: [id])
+  project          project?      @relation(fields: [project_id], references: [id])
+  question_type    question_type @relation(fields: [question_type_id], references: [id])
+  survey           survey        @relation(fields: [survey_id], references: [id])
+  answer           answer[]
+}
+
+model question_type {
+  id                 Int        @id @default(autoincrement())
+  created_at         DateTime?  @default(now()) @db.Timestamp(6)
+  deleted            Boolean?   @default(false)
+  deleted_at         DateTime?  @db.Timestamp(6)
+  available_settings Json?      @db.Json
+  name               String     @db.VarChar
+  question           question[]
+}
+
+model reply_attachment {
+  id              Int             @id @default(autoincrement())
+  url             String          @db.VarChar
+  reply_id        Int
+  type            attachment_type
+  size            String          @db.VarChar
+  name            String          @db.VarChar
+  created_at      DateTime?       @default(now()) @db.Timestamp(6)
+  deleted         Boolean?        @default(false)
+  deleted_at      DateTime?       @db.Timestamp(6)
+  project_id      Int
+  organization_id Int
+  organization    organization    @relation(fields: [organization_id], references: [id])
+  project         project         @relation(fields: [project_id], references: [id])
+  mail_reply      mail_reply      @relation(fields: [reply_id], references: [id])
+}
+
+model report {
+  id                            Int                  @id @default(autoincrement())
+  formatted_address             String               @db.VarChar
+  zipcode                       String?              @db.VarChar
+  description                   String?              @db.VarChar
+  source                        report_source?
+  status                        report_status?
+  priority                      report_priority?
+  efields                       Json?                @db.Json
+  reported_by                   Int?
+  typename_id                   Int?
+  created_at                    DateTime?            @default(now()) @db.Timestamp(6)
+  deleted                       Boolean?             @default(false)
+  deleted_at                    DateTime?            @db.Timestamp(6)
+  latitude                      Float?
+  longitude                     Float?
+  assigned_to                   Int?
+  assigned_at                   DateTime?            @db.Timestamp(6)
+  closed_at                     DateTime?            @db.Timestamp(6)
+  department_id                 Int?
+  project_id                    Int?
+  organization_id               Int?
+  location                      Unsupported("point")
+  image                         String?              @db.VarChar
+  due_date                      DateTime?            @db.Timestamp(6)
+  reject_reason                 String?              @db.VarChar
+  last_edit                     DateTime?            @db.Timestamp(6)
+  reject_at                     DateTime?            @db.Timestamp(6)
+  type                          report_type?
+  something                     report_something?
+  resident                      String?              @db.VarChar
+  images                        String[]             @db.VarChar
+  public                        Boolean?             @default(true)
+  user_report_assigned_toTouser user?                @relation("report_assigned_toTouser", fields: [assigned_to], references: [id])
+  department                    department?          @relation(fields: [department_id], references: [id])
+  organization                  organization?        @relation(fields: [organization_id], references: [id])
+  project                       project?             @relation(fields: [project_id], references: [id])
+  user_report_reported_byTouser user?                @relation("report_reported_byTouser", fields: [reported_by], references: [id])
+  typename                      typename?            @relation(fields: [typename_id], references: [id])
+}
+
+model resource_category {
+  id                                                 Int         @id @default(autoincrement())
+  name                                               String      @db.VarChar
+  created_at                                         DateTime?   @default(now()) @db.Timestamp(6)
+  deleted                                            Boolean?    @default(false)
+  deleted_at                                         DateTime?   @db.Timestamp(6)
+  project_id                                         Int?
+  organization_id                                    Int?
+  project_projectToresource_category_organization_id project?    @relation("projectToresource_category_organization_id", fields: [organization_id], references: [id])
+  project_projectToresource_category_project_id      project?    @relation("projectToresource_category_project_id", fields: [project_id], references: [id])
+  resources                                          resources[]
+
+  @@unique([project_id, name], name: "resource_category_project_id_name_idx")
+  @@unique([project_id, name], name: "resource_category_project_id_name_idx1")
+  @@unique([project_id, name], name: "resource_category_project_id_name_idx2")
+}
+
+model resources {
+  id                                         Int               @id @default(autoincrement())
+  title                                      String            @db.VarChar
+  image                                      String?           @db.VarChar
+  description                                String?           @db.VarChar
+  website_link                               String?           @db.VarChar
+  resource_category_id                       Int
+  views                                      Int?              @default(0)
+  last_edit                                  DateTime?         @default(now()) @db.Timestamp(6)
+  published                                  Boolean?          @default(false)
+  posted_at                                  DateTime?         @db.Timestamp(6)
+  created_at                                 DateTime?         @default(now()) @db.Timestamp(6)
+  deleted                                    Boolean?          @default(false)
+  deleted_at                                 DateTime?         @db.Timestamp(6)
+  project_id                                 Int?
+  organization_id                            Int?
+  more_websites                              Json?             @db.Json
+  project_projectToresources_organization_id project?          @relation("projectToresources_organization_id", fields: [organization_id], references: [id])
+  project_projectToresources_project_id      project?          @relation("projectToresources_project_id", fields: [project_id], references: [id])
+  resource_category                          resource_category @relation(fields: [resource_category_id], references: [id])
+  user_resource                              user_resource[]
+}
+
+model role {
+  id              Int               @id @default(autoincrement())
+  permission      Json              @db.Json
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  deleted         Boolean?          @default(false)
+  deleted_at      DateTime?         @db.Timestamp(6)
+  name            String            @db.VarChar
+  project_id      Int?
+  organization_id Int?
+  organization    organization?     @relation(fields: [organization_id], references: [id])
+  project         project?          @relation(fields: [project_id], references: [id])
+  user_department user_department[]
+  user_roles      user_roles[]
+  worker_project  worker_project[]
+
+  @@unique([project_id, name], name: "role_project_id_name_idx")
+  @@unique([project_id, name], name: "role_project_id_name_idx1")
+  @@unique([project_id, name], name: "role_project_id_name_idx2")
+}
+
+model room {
+  id          Int           @id @default(autoincrement())
+  topic       String?       @db.VarChar
+  type        room_type?
+  comments    comments[]
+  participant participant[]
+}
+
+model survey {
+  id              Int             @id @default(autoincrement())
+  title           String?         @db.VarChar
+  description     String?         @db.VarChar
+  image           String?         @db.VarChar
+  project_id      Int?
+  organization_id Int?
+  created_at      DateTime?       @default(now()) @db.Timestamp(6)
+  deleted         Boolean?        @default(false)
+  deleted_at      DateTime?       @db.Timestamp(6)
+  published       Boolean?
+  posted_at       DateTime?       @db.Timestamp(6)
+  last_edit       DateTime?       @db.Timestamp(6)
+  participants    Int?            @default(0)
+  available_until DateTime?       @db.Timestamp(6)
+  next_survey_id  Int?
+  survey          survey?         @relation("surveyTosurvey_next_survey_id", fields: [next_survey_id], references: [id])
+  organization    organization?   @relation(fields: [organization_id], references: [id])
+  project         project?        @relation(fields: [project_id], references: [id])
+  question        question[]
+  other_survey    survey[]        @relation("surveyTosurvey_next_survey_id")
+  survey_answer   survey_answer[]
+}
+
+model survey_answer {
+  id              Int           @id @default(autoincrement())
+  survey_id       Int
+  user_id         Int
+  project_id      Int?
+  organization_id Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  survey          survey        @relation(fields: [survey_id], references: [id])
+  user            user          @relation(fields: [user_id], references: [id])
+  answer          answer[]
+
+  @@unique([survey_id, user_id], name: "user_survey")
+}
+
+model terms {
+  id         Int     @id @default(autoincrement())
+  version    Int     @default(autoincrement())
+  plain_text String? @db.VarChar
+  html_text  String? @db.VarChar
+  url        String? @db.VarChar
+}
+
+model typename {
+  id                Int               @id @default(autoincrement())
+  visible           Boolean?          @default(true)
+  image_req         Boolean?          @default(true)
+  color             String            @db.VarChar
+  eform_id          Int?
+  department_id     Int?
+  project_id        Int?
+  organization_id   Int?
+  created_at        DateTime?         @default(now()) @db.Timestamp(6)
+  deleted           Boolean?          @default(false)
+  deleted_at        DateTime?         @db.Timestamp(6)
+  category_id       Int
+  name              String            @db.VarChar
+  typename_category typename_category @relation(fields: [category_id], references: [id])
+  department        department?       @relation(fields: [department_id], references: [id])
+  organization      organization?     @relation(fields: [organization_id], references: [id])
+  project           project?          @relation(fields: [project_id], references: [id])
+  report            report[]
+}
+
+model typename_category {
+  id              Int          @id @default(autoincrement())
+  name            String       @db.VarChar
+  project_id      Int
+  organization_id Int
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  image           String?      @db.VarChar
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project      @relation(fields: [project_id], references: [id])
+  typename        typename[]
+}
+
+model user {
+  id                                Int                 @id @default(autoincrement())
+  name                              String              @db.VarChar
+  last_name                         String              @db.VarChar
+  email                             String              @unique @db.VarChar
+  phone                             String?             @db.VarChar
+  project_id                        Int?
+  organization_id                   Int?
+  created_at                        DateTime?           @default(now()) @db.Timestamp(6)
+  deleted                           Boolean?            @default(false)
+  deleted_at                        DateTime?           @db.Timestamp(6)
+  disabled                          Boolean?            @default(false)
+  cognito_sub                       String              @unique @db.VarChar
+  gender                            Int?                @default(0)
+  updated_at                        DateTime?           @db.Timestamp(6)
+  zipcode                           String?             @db.VarChar
+  ethnicity                         String?             @db.VarChar
+  image                             String?             @db.VarChar
+  birthday                          String?             @db.VarChar
+  self_gender                       String?             @db.VarChar
+  configurations                    Json?               @db.Json
+  organization                      organization?       @relation(fields: [organization_id], references: [id])
+  project_projectTouser_project_id  project?            @relation("projectTouser_project_id", fields: [project_id], references: [id])
+  analytics                         analytics[]
+  dashboard_config                  dashboard_config[]
+  department                        department[]
+  mail                              mail[]
+  mail_reply                        mail_reply[]
+  message                           message[]
+  participant                       participant[]
+  project_project_director_idTouser project[]           @relation("project_director_idTouser")
+  report_report_assigned_toTouser   report[]            @relation("report_assigned_toTouser")
+  report_report_reported_byTouser   report[]            @relation("report_reported_byTouser")
+  survey_answer                     survey_answer[]
+  user_department                   user_department?
+  user_event                        user_event[]
+  user_mail                         user_mail[]
+  user_message                      user_message[]
+  user_organization                 user_organization[]
+  user_project                      user_project[]
+  user_resource                     user_resource[]
+  user_roles                        user_roles[]
+  worker_project                    worker_project[]
+}
+
+model user_department {
+  user_id                                          Int        @unique
+  department_id                                    Int
+  created_at                                       DateTime?  @default(now()) @db.Timestamp(6)
+  deleted                                          Boolean?   @default(false)
+  deleted_at                                       DateTime?  @db.Timestamp(6)
+  project_id                                       Int?
+  organization_id                                  Int?
+  role_id                                          Int?
+  disabled                                         Boolean?   @default(false)
+  department                                       department @relation(fields: [department_id], references: [id])
+  project_projectTouser_department_organization_id project?   @relation("projectTouser_department_organization_id", fields: [organization_id], references: [id])
+  project_projectTouser_department_project_id      project?   @relation("projectTouser_department_project_id", fields: [project_id], references: [id])
+  role                                             role?      @relation(fields: [role_id], references: [id])
+  user                                             user       @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, department_id])
+}
+
+model user_event {
+  id              Int          @id @default(autoincrement())
+  event_id        Int?
+  user_id         Int?
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  project_id      Int
+  organization_id Int
+  last_edit       DateTime?    @db.Timestamp(6)
+  event           event?       @relation(fields: [event_id], references: [id])
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project      @relation(fields: [project_id], references: [id])
+  user            user?        @relation(fields: [user_id], references: [id])
+
+  @@unique([event_id, user_id], name: "user_event_event_id_user_id_idx")
+}
+
+model user_mail {
+  id              Int          @id @default(autoincrement())
+  user_id         Int
+  mail_id         Int
+  starred         Boolean?     @default(false)
+  archive         Boolean?     @default(false)
+  read            Boolean?     @default(false)
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  last_edit       DateTime?    @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  project_id      Int
+  organization_id Int
+  mail            mail         @relation(fields: [mail_id], references: [id])
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project      @relation(fields: [project_id], references: [id])
+  user            user         @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, mail_id], name: "user_mail_user_id_mail_id_idx")
+}
+
+model user_message {
+  id              Int           @id @default(autoincrement())
+  user_id         Int?
+  message_id      Int
+  type_id         Int
+  project_id      Int?
+  organization_id Int?
+  deleted         Boolean?      @default(false)
+  last_edit       DateTime?     @db.Timestamp(6)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  starred         Boolean?      @default(false)
+  archive         Boolean?      @default(false)
+  message         message       @relation(fields: [message_id], references: [id])
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  message_type    message_type  @relation(fields: [type_id], references: [id])
+  user            user?         @relation(fields: [user_id], references: [id])
+}
+
+model user_organization {
+  id              Int          @id @default(autoincrement())
+  organization_id Int
+  user_id         Int?
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  organization    organization @relation(fields: [organization_id], references: [id])
+  user            user?        @relation(fields: [user_id], references: [id])
+}
+
+model user_project {
+  id              Int          @id @default(autoincrement())
+  organization_id Int
+  user_id         Int?
+  project_id      Int?
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  enabled         Boolean?     @default(true)
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project?     @relation(fields: [project_id], references: [id])
+  user            user?        @relation(fields: [user_id], references: [id])
+
+  @@unique([organization_id, project_id, user_id], name: "user_organization_project")
+}
+
+model user_resource {
+  id              Int           @id @default(autoincrement())
+  resource_id     Int
+  user_id         Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  project_id      Int?
+  organization_id Int?
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  resources       resources     @relation(fields: [resource_id], references: [id])
+  user            user?         @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, resource_id], name: "user_resource_user_id_resource_id_idx1")
+  @@index([user_id, resource_id], name: "user_resource_user_id_resource_id_idx")
+}
+
+model user_roles {
+  id              Int           @id @default(autoincrement())
+  user_id         Int?
+  role_id         Int?
+  project_id      Int?
+  organization_id Int?
+  created_at      DateTime?     @default(now()) @db.Timestamp(6)
+  deleted         Boolean?      @default(false)
+  deleted_at      DateTime?     @db.Timestamp(6)
+  organization    organization? @relation(fields: [organization_id], references: [id])
+  project         project?      @relation(fields: [project_id], references: [id])
+  role            role?         @relation(fields: [role_id], references: [id])
+  user            user?         @relation(fields: [user_id], references: [id])
+}
+
+model worker_project {
+  id              Int          @id @default(autoincrement())
+  organization_id Int
+  user_id         Int?
+  project_id      Int?
+  created_at      DateTime?    @default(now()) @db.Timestamp(6)
+  deleted         Boolean?     @default(false)
+  deleted_at      DateTime?    @db.Timestamp(6)
+  enabled         Boolean?     @default(true)
+  role_id         Int?
+  department_id   Int?
+  department      department?  @relation(fields: [department_id], references: [id])
+  organization    organization @relation(fields: [organization_id], references: [id])
+  project         project?     @relation(fields: [project_id], references: [id])
+  role            role?        @relation(fields: [role_id], references: [id])
+  user            user?        @relation(fields: [user_id], references: [id])
+
+  @@unique([organization_id, project_id, user_id], name: "worker_organization_project")
+  @@unique([user_id, project_id], name: "worker_project_user_id_project_id_idx")
+}
+
+enum attachment_type {
+  document
+  image
+  video
+  audio
+}
+
+enum invitation_status {
+  sent
+  accepted
+}
+
+enum report_priority {
+  low
+  medium
+  high
+}
+
+enum report_something {
+  love
+  add
+  change
+}
+
+enum report_source {
+  web_app
+  mobile
+  smartgov
+  crm
+  chatbot
+  widget
+}
+
+enum report_status {
+  pending
+  open
+  rejected
+  resolved
+  blocked
+  closed
+}
+
+enum report_type {
+  location
+  category
+}
+
+enum room_type {
+  flag
+  task
+  user_to_user
+}
