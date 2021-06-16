@@ -1,0 +1,244 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.0",
+        "title": "Irys API V1",
+        "description": "API documentation for Irys platform",
+        "contact": {
+            "name": "Irys",
+            "url": "https://www.heyirys.com",
+            "email": "developer@heyirys.com"
+        },
+        "termsOfService": "https://www.heyirys.com/terminos"
+    },
+    "components": {
+        "schemas": {
+            "Report": {
+                "type": "object",
+                "required": ["flag"],
+                "properties": {
+                    "flag": {
+                        "properties": {
+                            "description": {
+                                "type": "string"
+                            },
+                            "zipcode": {
+                                "type": "number"
+                            },
+                            "address": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "type": "string"
+                            },
+                            "typename_id": {
+                                "type": "number"
+                            },
+                            "reported_by": {
+                                "type": "number"
+                            },
+                            "latitude": {
+                                "type": "number"
+                            },
+                            "longitude": {
+                                "type": "number"
+                            },
+                            "organization_id": {
+                                "type": "number"
+                            },
+                            "project_id": {
+                                "type": "number"
+                            },
+                            "efields": {
+                                "type": "array"
+                            },
+                            "images": {
+                                "type": "array"
+                            },
+                            "type_id": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "cognito": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api/v1",
+            "description": "Local Server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Reports",
+            "description": "Operations for reports/flags"
+        }
+    ],
+    "paths": {
+        "/reports": {
+            "get": {
+                "tags": ["Reports"],
+                "summary": "Get all reports from the database",
+                "description": "Returns all reports from all the projects created in the database.",
+                "operationId": "getReports",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "statusCode": 200,
+                                    "headers": {
+                                        "Content-Type": "application/json"
+                                    },
+                                    "message": {
+                                        "en": "Reports listed succesfully",
+                                        "es": "Se han listado los reportes correctamente"
+                                    },
+                                    "body": [
+                                        {
+                                            "id": 144,
+                                            "formatted_address": "515 s Frio San Antonio",
+                                            "zipcode": "75222",
+                                            "description": "Swagger docs",
+                                            "source": "widget",
+                                            "status": "pending",
+                                            "priority": null,
+                                            "efields": [],
+                                            "reported_by": null,
+                                            "typename_id": null,
+                                            "created_at": "2021-06-09T14:28:27.572Z",
+                                            "deleted": false,
+                                            "deleted_at": null,
+                                            "latitude": 25.1,
+                                            "longitude": -98,
+                                            "assigned_to": null,
+                                            "assigned_at": null,
+                                            "closed_at": null,
+                                            "department_id": null,
+                                            "project_id": 1,
+                                            "organization_id": 1,
+                                            "image": null,
+                                            "due_date": null,
+                                            "reject_reason": null,
+                                            "last_edit": null,
+                                            "reject_at": null,
+                                            "images": ["test.jpg", "test2.jpg"],
+                                            "resident": null,
+                                            "something": "love",
+                                            "type": "location",
+                                            "public": true,
+                                            "user_report_assigned_toTouser": null,
+                                            "user_report_reported_byTouser": null,
+                                            "typename": null,
+                                            "department": null
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+
+                    "500": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "statusCode": 500,
+                                    "headers": {
+                                        "Content-Type": "application/json"
+                                    },
+                                    "body": "Error message"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Reports"],
+                "summary": "Create a new report",
+                "description": "Create a new report giving a provided body",
+                "operationId": "postReport",
+                "requestBody": {
+                    "description": "Se envía json que contiene los campos de usuario y contraseña",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Persona"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Persona"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Petición exitosa",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "ok": true,
+                                    "resp": 200,
+                                    "mgs": "Se han registrado la persona exitosamente.",
+                                    "cont": {
+                                        "persona": "{}"
+                                    },
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Petición fallida",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "ok": false,
+                                    "resp": 400,
+                                    "mgs": "El correo del usuario que desea registrar ya se encuentra en uso.",
+                                    "cont": {
+                                        "strCorreo": "john.doe@mail.com"
+                                    },
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Petición fallida",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "ok": false,
+                                    "resp": 500,
+                                    "mgs": "Error al intentar registrar la persona.",
+                                    "cont": {
+                                        "err": "..."
+                                    },
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/more": {}
+    }
+}
