@@ -32,9 +32,7 @@ router.post("/", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/projects/:pid", async (req, res) => {
@@ -96,9 +94,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/delete", async (req, res) => {
@@ -130,9 +126,7 @@ router.put("/:id/delete", async (req, res) => {
             res,
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/:id", process.middlewares, async (req, res) => {
@@ -165,9 +159,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/publish", async (req, res) => {
@@ -358,9 +350,7 @@ router.post("/:id/questions", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -427,9 +417,7 @@ router.put("/questions/:qid/delete", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/:id/questions", process.middlewares, async (req, res) => {
@@ -459,9 +447,7 @@ router.get("/:id/questions", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -485,9 +471,7 @@ router.get("/questions/types", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -632,9 +616,7 @@ router.post("/:id/responses", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/:id/responses", process.middlewares, async (req, res) => {
@@ -661,9 +643,7 @@ router.get("/:id/responses", process.middlewares, async (req, res) => {
         });
     } catch (error) {
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/responses/:rid/delete", process.middlewares, async (req, res) => {
@@ -691,9 +671,7 @@ router.get("/responses/:rid/delete", process.middlewares, async (req, res) => {
         });
     } catch (error) {
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified. Is it used ?
@@ -715,9 +693,7 @@ router.get("/responses/:id", process.middlewares, async (req, res) => {
         });
     } catch (error) {
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/:id/response", async (req, res) => {
@@ -780,9 +756,7 @@ router.get("/:id/response", async (req, res) => {
         });
     } catch (error) {
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.post("/response/:rid/answers", async (req, res) => {
@@ -860,9 +834,7 @@ router.post("/response/:rid/answers", async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -895,9 +867,7 @@ router.put("/answers/:id", async (req, res) => {
             res,
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -976,9 +946,7 @@ router.put("/respons/:id/answers", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

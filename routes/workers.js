@@ -109,9 +109,7 @@ router.post("/projects/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Check if cognito account exists
@@ -228,9 +226,7 @@ const createDBUser = async (event) => {
     } catch (e) {
         console.log(e);
         throw "Worker could not be created, server error";
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 };
 
 const sendEmail = async (destinatary, projectName, senderWorker, projectId) => {
@@ -314,9 +310,7 @@ router.put("/profile", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //updateCityWorker
@@ -373,9 +367,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //updateCityWorker
@@ -404,9 +396,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //cognitoWorkerProfile
@@ -503,9 +493,7 @@ router.get("/profile", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // createDashboardConfig: ${file(serverless_functions/upsert_user_project_dash.yml)}
@@ -621,9 +609,7 @@ router.get("/projects", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //readCityWorker
@@ -652,9 +638,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // listProjectWorkers: ${file(serverless_functions/list_project_workers.yml)}
@@ -714,9 +698,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
             res,
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // enableWorker: ${file(serverless_functions/enable_city_worker.yml)}
@@ -745,9 +727,7 @@ router.put("/:id/enable", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // disableWorker: ${file(serverless_functions/disable_city_worker.yml)}
@@ -776,9 +756,7 @@ router.put("/:id/disable", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // createUserOrganization: ${file(serverless_functions/create_user-organization.yml)}
@@ -843,9 +821,7 @@ router.post("/organizations", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // searchByEmail : ${file(serverless_functions/search_workers_by_email.yml)}
@@ -911,9 +887,7 @@ router.get("/search/projects/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

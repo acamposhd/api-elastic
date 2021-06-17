@@ -20,9 +20,7 @@ router.get("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get events by project id
@@ -114,9 +112,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get event topics
@@ -127,9 +123,7 @@ router.get("/topics/all", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error reading Events topic :", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get event topic
@@ -144,9 +138,7 @@ router.get("/topic/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get event topics by project
@@ -210,9 +202,7 @@ router.post("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Create user's event
@@ -303,9 +293,7 @@ router.post("/projects/:id/topics", process.middlewares, async (req, res) => {
         //More error management
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Create event topic
@@ -320,9 +308,7 @@ router.post("/topics", process.middlewares, async (req, res) => {
         //More error management
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Update event
@@ -357,9 +343,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Update event topic
@@ -378,9 +362,7 @@ router.put("/topics/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Publish event
@@ -409,9 +391,7 @@ router.put("/:id/publish", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Unpublish event
@@ -440,9 +420,7 @@ router.put("/:id/unpublish", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Duplicate event
@@ -503,9 +481,7 @@ router.put("/:id/duplicate", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Remove user event
@@ -529,9 +505,7 @@ router.put("/my_events/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Delete event (logical)
@@ -556,9 +530,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Delete event (physical)
@@ -575,9 +547,7 @@ router.delete("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

@@ -53,9 +53,7 @@ router.post("/projects/:id", process.middlewares, async (req, res) => {
             },
             error: error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // GET KNOWLEDGE //
@@ -89,9 +87,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UPDATE KNOWLEDGE //
@@ -129,9 +125,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /knowledge/:id/delete > to > /knowledge/delete/:id
@@ -163,9 +157,7 @@ router.put("/:id/delete/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /knowledge/:id/publish > to > /knowledge/publish/:id
@@ -196,9 +188,7 @@ router.put("/:id/publish/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /knowledge/1/duplicate > to > /knowledge/duplicate/1
@@ -268,9 +258,7 @@ router.post("/duplicate/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGE* from /knowledge/:id/unpublish > to > /knowledge/unpublish/:id
@@ -300,9 +288,7 @@ router.put("/:id/unpublish/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/:id/knowledge > to > /knowledge/project/:id
@@ -330,9 +316,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 // *CHANGED* from projects/1/categories_and_knowledge > to > knowledge/projects/1/categories_and_knowledge
 // LIST KNOWLEDGE AND CATEGORIES //
@@ -413,9 +397,7 @@ router.post("/projects/:id/category", process.middlewares, async (req, res) => {
         //More error management
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // possibly *CHANGED* from ? > to > /knowledge/project/:id/category
@@ -459,9 +441,7 @@ router.get("/category/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UPDATE KNOWLEDGE CATEGORY //
@@ -480,9 +460,7 @@ router.put("/category/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

@@ -43,9 +43,7 @@ router.post("/", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //updateCitizen
@@ -71,9 +69,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //deleteCitizen
@@ -99,9 +95,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //listProjectCitizen
@@ -151,9 +145,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //citizenProfile
@@ -178,9 +170,7 @@ router.get("/profile", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //listCitizenProjects
@@ -228,9 +218,7 @@ router.get("/projects", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //readCitizen
@@ -259,9 +247,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //updateCitizenProfile
@@ -287,9 +273,7 @@ router.put("/profile", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //createCitizenWithProject
@@ -369,9 +353,7 @@ router.post("/projects/:id/launchsa", process.middlewares, async (req, res) => {
             },
             body: event,
         };
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //disableCitizen
@@ -401,9 +383,7 @@ router.put("/:id/disable", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //enableCitizens
@@ -433,9 +413,7 @@ router.put("/:id/enable", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

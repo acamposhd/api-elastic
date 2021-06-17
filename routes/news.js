@@ -41,9 +41,7 @@ router.post("/", async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // LIST ALL NEWS
@@ -75,9 +73,7 @@ router.get("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // GET NEWS BY ID //
@@ -111,9 +107,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UPDATE NEWS //
@@ -145,9 +139,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // DELETE NEWS BY ID //
@@ -177,9 +169,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 // *CHANGE* from /news/:id/publish > to > /news/publish/:id
 // PUBLISH NEWS //
@@ -209,9 +199,7 @@ router.put("/:id/publish/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGE* from /news/:id/duplicate > to > /news/duplicate/:id //
@@ -274,9 +262,7 @@ router.put("/:id/duplicate", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /news/16/unpublish > to > /news/unpublish/16 //
@@ -306,9 +292,7 @@ router.put("/:id/unpublish", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return successResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/:id/news > to > /news/projects/:id
@@ -334,9 +318,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

@@ -38,9 +38,7 @@ router.post("/", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/:id", process.middlewares, async (req, res) => {
@@ -74,9 +72,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.get("/projects/:id", process.middlewares, async (req, res) => {
@@ -102,9 +98,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id", process.middlewares, async (req, res) => {
@@ -136,9 +130,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/delete", process.middlewares, async (req, res) => {
@@ -168,9 +160,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/publish", async (req, res) => {
@@ -200,9 +190,7 @@ router.put("/:id/publish", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/unpublish", async (req, res) => {
@@ -229,9 +217,7 @@ router.put("/:id/unpublish", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id/duplicate", process.middlewares, async (req, res) => {
@@ -284,8 +270,6 @@ router.put("/:id/duplicate", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 module.exports = router;

@@ -25,9 +25,7 @@ router.get("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // GET NOTIFICATION BY ID //
@@ -62,9 +60,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UPDATE NOTIFICATIONS BY ID //
@@ -93,9 +89,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // DELETE A NOTIFICATION BY ID //
@@ -125,9 +119,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // DUPLICATE BY ID //
@@ -198,9 +190,7 @@ router.post("/:id/duplicate", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //const publishNotification = async (event) => {
@@ -230,9 +220,7 @@ router.put("/:id/publish/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UNPUBLISH NOTIFICATION
@@ -262,9 +250,7 @@ router.put("/:id/unpublish", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /project/:id/notification > to > /notification/project/:id //
@@ -329,9 +315,7 @@ router.post("/projects/:id", process.middlewares, async (req, res) => {
             },
             error: req.body,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/:id/notification > to > /notification/project/:id //
@@ -358,9 +342,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

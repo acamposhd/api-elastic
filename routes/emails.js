@@ -136,9 +136,7 @@ router.get("/projects/:id/received", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/1/emails/archive > to > /emails/projects/:id/archived
@@ -226,9 +224,7 @@ router.get("/projects/:id/archived", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // GET EMAIL //
@@ -319,9 +315,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/1/emails > to > /emails/projects/:id
@@ -501,9 +495,7 @@ router.post("/projects/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // CREATE REPLY //
@@ -635,9 +627,7 @@ router.post("/:id/reply", process.middlewares, async (req, res) => {
             },
             error: req.body.body,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/1/emails/starred > to > /emails/projects/:id/starred
@@ -676,9 +666,7 @@ router.put("/:id/starred", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // ARCHIVE EMAILS //
@@ -701,9 +689,7 @@ router.put("/archive", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // ARCHIVE EMAILS //
@@ -743,9 +729,7 @@ router.put("/:id/archive", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //MARK AS READ //
@@ -784,9 +768,7 @@ router.put("/:id/read", process.middlewares, async (req, res) => {
             },
             error: "Email could not be starred",
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // DELETE EMAIL (LOGICAL) //
@@ -823,9 +805,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
             },
             error: req.body,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

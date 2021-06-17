@@ -81,9 +81,7 @@ router.get("/:id/departments", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error listing Departments:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //createProject
@@ -199,9 +197,7 @@ router.post("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error("Error creating a Project:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //readProject
@@ -227,9 +223,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error reading a Project:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //updateProject
@@ -262,9 +256,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error updating a Project:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //projectResume
@@ -319,9 +311,7 @@ router.get("/:id/resume", process.middlewares, async (req, res) => {
                 es: "No se han podido recopilar la información del proyecto",
             },
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //deleteProject
@@ -340,9 +330,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error deleting a Project:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //listProjects
@@ -356,9 +344,7 @@ router.get("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error listing Projects:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //joinProject
@@ -430,9 +416,7 @@ router.post("/:id/join", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 const joinPrivateProject = async (user, project, code, res) => {
@@ -524,9 +508,7 @@ router.get("/:id/join", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error checking if user is in the project", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //inviteCitizenToProject
@@ -641,9 +623,7 @@ const createDBInvitation = async (data) => {
     } catch (e) {
         console.log(e);
         throw e;
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 };
 
 module.exports = router;

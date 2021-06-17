@@ -22,9 +22,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.log("Error updating the organization:", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

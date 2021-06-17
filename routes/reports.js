@@ -199,9 +199,7 @@ router.get("/categories", process.middlewares, async (req, res) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(error),
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1 > to > /reports/:id
@@ -697,9 +695,7 @@ router.get("/categories/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // UPDATE A CATEGORY ON A FLAG //
@@ -745,9 +741,7 @@ router.put("/categories/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error("Error: ", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // LIST ALL CATEGORIES IN PROJECT //
@@ -870,9 +864,7 @@ router.put("/categories/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/1/typereports > to > /reports/projects/1/typereports
@@ -943,9 +935,7 @@ router.get("/typereports/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /typereports/:id > to > /reports/typereports/:id
@@ -974,9 +964,7 @@ router.put("/typereports/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /typereports/143/delete > to > /reports/typereports/:id/delete
@@ -1007,9 +995,7 @@ router.put("/typereports/:id/delete", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

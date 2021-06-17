@@ -16,9 +16,7 @@ router.get("/", async (req, res) => {
     } catch (error) {
         console.log("Error getting lastest terms and condition", error);
         return errorResponse({ res, error });
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 module.exports = router;

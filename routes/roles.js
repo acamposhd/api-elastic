@@ -35,9 +35,6 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
           error
         });
       }
-      finally {
-        await prisma.$disconnect()
-      }
 })
 
 module.exports = router
