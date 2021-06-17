@@ -63,10 +63,7 @@ router.get("/projects/:pid", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.put("/:id", process.middlewares, async (req, res) => {
@@ -188,10 +185,7 @@ router.put("/:id/publish", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.post("/:id/duplicate", async (req, res) => {
@@ -299,10 +293,7 @@ router.post("/:id/duplicate", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.post("/:id/questions", process.middlewares, async (req, res) => {
@@ -383,10 +374,7 @@ router.put("/questions/:qid", async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -496,10 +484,7 @@ router.get("/questions/:qid", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Route modified
@@ -566,10 +551,7 @@ router.put("/questions/:qid/order", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 router.post("/:id/responses", process.middlewares, async (req, res) => {

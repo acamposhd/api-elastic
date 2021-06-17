@@ -422,10 +422,7 @@ router.get("/projects/:id/category", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // GET A CATEGORY BY ID //

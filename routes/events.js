@@ -53,10 +53,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get user's events by project
@@ -93,10 +90,7 @@ router.get("/projects/:id/my_events", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Get event
@@ -160,10 +154,7 @@ router.get("/projects/:id/topics", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //Create event

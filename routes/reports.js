@@ -45,10 +45,7 @@ router.get("/", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/36/report?app=true > to > /reports/projects/:id (project id)
@@ -100,10 +97,7 @@ router.get("/projects/:id", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /projects/1/citizen/report > to > reports/projects/:id/citizen (project id)
@@ -151,10 +145,7 @@ router.get("/projects/:id/citizen", process.middlewares, async (req, res) => {
     } catch (error) {
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 //                                       <--ATTENTION-->
@@ -229,10 +220,7 @@ router.get("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report > to > /reports
@@ -301,10 +289,7 @@ router.post("/", process.middlewares, async (req, res) => {
         //More error management
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/widget > to > reports/widget
@@ -358,10 +343,7 @@ router.post("/widget", process.middlewares, async (req, res) => {
         //More error management
         console.error(error);
         return errorResponse({ res, error });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1 > to > /reports/:id
@@ -394,10 +376,7 @@ router.put("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1/approve > to > /reports/:id/approve
@@ -452,10 +431,7 @@ router.put("/:id/approve", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1/show > to > /reports/:id/show
@@ -487,10 +463,7 @@ router.put("/:id/show", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1/reject > to > /reports/:id/reject
@@ -526,10 +499,7 @@ router.put("/:id/reject", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // *CHANGED* from /report/1/delete > to > /reports/:id/delete
@@ -561,10 +531,7 @@ router.put("/:id/delete", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 // Delete report (physical) //
@@ -588,10 +555,7 @@ router.delete("/:id", process.middlewares, async (req, res) => {
             },
             error,
         });
-    } finally {
-        console.log("Close DB");
-        await prisma.$disconnect();
-    }
+    } 
 });
 
 /**
