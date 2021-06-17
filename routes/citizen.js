@@ -30,7 +30,7 @@ router.get("/notification/:id", async function (req, res, next) {
       body: req.body,
     });
   } finally {
-    await prisma.$disconnect();
+    
   }
 });
 

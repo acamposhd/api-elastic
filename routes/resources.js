@@ -136,7 +136,7 @@ router.get(
             console.error(error);
             return errorResponse({ res, error });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );
@@ -399,7 +399,7 @@ router.get(
             return errorResponse({ res, error });
         } finally {
             console.log("Close DB");
-            await prisma.$disconnect();
+            
         }
     }
 );
@@ -438,7 +438,7 @@ router.post(
             console.error(error);
             return errorResponse({ res, error });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );

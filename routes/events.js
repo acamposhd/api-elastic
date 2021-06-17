@@ -253,7 +253,7 @@ router.post(
             return errorResponse({ res, error });
         } finally {
             console.log("Close DB");
-            await prisma.$disconnect();
+            
         }
     }
 );

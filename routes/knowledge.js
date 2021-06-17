@@ -365,7 +365,7 @@ router.get(
             return errorResponse({ res, error });
         } finally {
             console.log("Close DB");
-            await prisma.$disconnect();
+            
         }
     }
 );

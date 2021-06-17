@@ -621,7 +621,7 @@ router.post(
                 error: req.body,
             });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );
@@ -752,7 +752,7 @@ router.get(
             console.error(error);
             return errorResponse({ res, error });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );
@@ -795,7 +795,7 @@ router.get(
                 body: error,
             });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );
@@ -860,7 +860,7 @@ router.post(
             console.error("Error: ", error);
             return errorResponse({ res, error });
         } finally {
-            await prisma.$disconnect();
+            
         }
     }
 );
