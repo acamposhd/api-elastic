@@ -183,6 +183,56 @@ router.get("/profile", process.middlewares, async (req, res) => {
     }
 });
 
+//listCitizenProjects
+router.get("/projects", process.middlewares, async (req, res) => {
+    const { body, currentUser } = req;
+    try {
+        const { sub } = currentUser;
+        const user = await prisma.user.findUnique({
+            where: { cognito_sub: sub },
+        });
+        if (user) {
+            const citizen_projects = await prisma.user_project.findMany({
+                where: { user_id: user.id },
+                select: {
+                    id: true,
+                    project: {
+                        select: { name: true, id: true, logo: true },
+                    },
+                    organization: {
+                        select: { name: true, id: true },
+                    },
+                },
+            });
+            return successResponse({
+                res,
+                body: citizen_projects,
+            });
+        } else {
+            errorRespons({
+                res,
+                message: {
+                    en: "Innvalid user",
+                    es: "Usuario no valido",
+                },
+                error,
+            });
+        }
+    } catch (error) {
+        console.log("Error listing Citizens:", error);
+        return errorResponse({
+            res,
+            message: {
+                en: "Citizen projects could not be listed, server error",
+                es: "No se ha podido listar los proyectos del usuario",
+            },
+            error,
+        });
+    } finally {
+        await prisma.$disconnect();
+    }
+});
+
 //readCitizen
 //To do: Check if required move get citizen using user_project id
 router.get("/:id", process.middlewares, async (req, res) => {
@@ -234,56 +284,6 @@ router.put("/profile", process.middlewares, async (req, res) => {
             message: {
                 en: "User could not be updated, server error",
                 es: "No se ha podido actualizar el perfil de usuario",
-            },
-            error,
-        });
-    } finally {
-        await prisma.$disconnect();
-    }
-});
-
-//listCitizenProjects
-router.get("/projects", process.middlewares, async (req, res) => {
-    const { body, currentUser } = req;
-    try {
-        const { sub } = currentUser;
-        const user = await prisma.user.findUnique({
-            where: { cognito_sub: sub },
-        });
-        if (user) {
-            const citizen_projects = await prisma.user_project.findMany({
-                where: { user_id: user.id },
-                select: {
-                    id: true,
-                    project: {
-                        select: { name: true, id: true, logo: true },
-                    },
-                    organization: {
-                        select: { name: true, id: true },
-                    },
-                },
-            });
-            return successResponse({
-                res,
-                body: citizen_projects,
-            });
-        } else {
-            errorRespons({
-                res,
-                message: {
-                    en: "Innvalid user",
-                    es: "Usuario no valido",
-                },
-                error,
-            });
-        }
-    } catch (error) {
-        console.log("Error listing Citizens:", error);
-        return errorResponse({
-            res,
-            message: {
-                en: "Citizen projects could not be listed, server error",
-                es: "No se ha podido listar los proyectos del usuario",
             },
             error,
         });
